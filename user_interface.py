@@ -9,6 +9,7 @@ import random
 import threading
 from typing import List
 import pickle as pk
+import sys
 
 class CalibUI:
 
@@ -126,6 +127,7 @@ class CalibUI:
         
         if len(obj_points) == 0: 
             print ('[INFO] no valid image for calibration found')
+            print ('[INFO] calibration failed, please restart')
             return
         
         ret, \
@@ -150,7 +152,8 @@ class CalibUI:
             pk.dump(calib_dict, f)
 
 if __name__ == '__main__':
-    calib_ui = CalibUI()
+    square_size = float(sys.argv[1])
+    calib_ui = CalibUI(size = square_size)
     calib_ui.start_UI()
 
         
