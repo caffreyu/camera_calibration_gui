@@ -1,0 +1,6 @@
+tk
+glob2
+opencv-python>=4.2
+numpy
+pillow==7.0.0
+thread6
