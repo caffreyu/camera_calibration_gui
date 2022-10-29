@@ -86,13 +86,13 @@ class CalibUI:
                 img_label.image = img_tk
                 img_label.place(x = 0, y = 0)
         except:
-            print ('[INFO] sliently pass exception')
+            print ('[INFO] silently pass exception')
     
     def _on_close(self):
         self._stop_event.set()
         self._cap.release()
         self._window.quit()
-        print ('[INFO] shutdown camera calibration gui')
+        print ('[INFO] shutting down camera calibration gui')
     
     def _mat_to_tk_image(self):
         img_pil = Image.fromarray(self._img_rgb)
@@ -126,8 +126,9 @@ class CalibUI:
                 img_points.append(corners_2d)
         
         if len(obj_points) == 0: 
-            print ('[INFO] no valid image for calibration found')
+            print ('[INFO] no valid images for calibration found')
             print ('[INFO] calibration failed, please restart')
+            self._on_close()
             return
         
         ret, \
@@ -148,12 +149,17 @@ class CalibUI:
         calib_dict['rvecs'] = rvecs
         calib_dict['tvecs'] = tvecs
 
-        with open('cam_calb_result.pickle', 'wb') as f:
+        fname = 'camera_calibration_result.pickle'
+        with open(fname, 'wb') as f:
             pk.dump(calib_dict, f)
+        
+        print (f'[INFO] camera calibration results stored in {fname}')
+        f.close()
+        self._on_close()
 
 if __name__ == '__main__':
     square_size = float(sys.argv[1])
-    calib_ui = CalibUI(size = square_size)
+    calib_ui = CalibUI(square_size)
     calib_ui.start_UI()
 
         
